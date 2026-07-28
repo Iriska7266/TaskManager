@@ -1,8 +1,7 @@
 # Task Manager (terminal version)
 
----
 To run the program you need installed PostgreSQL
----
+
 ## DB initialization
 1. Go to PostgreSQL\bin folder. Copy path.
 2. Open terminal (win+R -> cmd) and paste copied path into `cd copied_path`. Run this comand.
