@@ -6,7 +6,7 @@ To run the program you need installed PostgreSQL
 ## DB initialization
 1. Go to PostgreSQL\bin folder. Copy path.
 2. Open terminal (win+R -> cmd) and paste copied path into `cd copied_path`. Run this comand.
-3. Run `psql -U -user_name -d tasks_system_db < path_to_db_dump.sql`. db_dump.sql is located in database folder, enter your DB name after `-U` (default - pstgres).
+3. Run `psql -U -user_name -d tasks_system_db < path_to_db_dump.sql`. db_dump.sql is located in database folder, enter your DB name after `-U` (default - postgres).
 4. Created database already contains test data with 1 user and 2 tasks. Test account login and password: Test Test.
 ---
 ## Dotenv preparing
