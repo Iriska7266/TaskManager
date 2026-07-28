@@ -9,11 +9,11 @@ To run the program you need installed PostgreSQL
 4. Created database already contains test data with 1 user and 2 tasks. Test account login and password: Test Test.
 ---
 ## Dotenv preparing
-1. Open .env.example and edit all information you need (user_name, password, host, port). Don't need to edit DB_URL.
+1. Open .env.example and edit all information you need (user_name, password, host, port). Don't edit DB_URL.
 2. Rename this file to .env.
 ---
 ## Final step
 Install all requirements from requirements.txt.
 That's all, now you can run main.py file and use the program.
 
-Database also includes actions_log table, which stores history of all data manipulations, it can't be seen from task manager, but if you want you can observe it in your DBMS.
+Database also includes actions_log table, which stores history of all data manipulations, it can't be seen from task manager, but if you want, you can observe it in your DBMS.
