@@ -14,6 +14,6 @@ To run the program you need installed PostgreSQL
 ---
 ## Final step
 Install all requirements from requirements.txt.
-That's all, now you can run main.py file and use the program
+That's all, now you can run main.py file and use the program.
 
-Database also includes actions_log table, which stores history of all data manipulations, it can't be seen from task manager, but if you want you can observe it in your DBMS
+Database also includes actions_log table, which stores history of all data manipulations, it can't be seen from task manager, but if you want you can observe it in your DBMS.
