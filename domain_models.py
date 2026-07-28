@@ -1,5 +1,5 @@
 import datetime
-from typing import Optional, List, Iterator
+from typing import List, Iterator
 
 from constraints import *
 from dto import *
@@ -36,13 +36,17 @@ class TaskModel:
         self.body = new_body
         return None
 
-    def change_deadline(self, new_deadline: str) -> Optional[str]:
-        try:
-            self.expires_at = datetime.strptime(new_deadline, "%Y-%m-%d %H:%M:%S")
-        except ValueError:
-            return f"Wrong deadline!"
-        else:
-            return None
+    def change_deadline(self, new_deadline: datetime) -> None:
+        self.expires_at = new_deadline
+        return None
+
+    def get_dto(self):
+        return TaskDTO(task_id=self.task_id,
+                       title=self.title,
+                       body=self.body,
+                       expires_at=self.expires_at,
+                       status=self.status,
+                       created_at=self.created_at)
 
     @staticmethod
     def __check_title__(f_title: str) -> Optional[str]:
@@ -90,25 +94,27 @@ class UserModel:
                 f"Registration time: {self.created_at.strftime("%Y-%m-%d %H:%M:%S")}\n"
                 f"Total tasks: {len(self.tasks)}")
 
-    def add_task(self, new_task_params: TaskDTO) -> Optional[str]:
-        new_task_id = len(self.tasks) + 1
-        try:
-            new_task_params.expires_at = datetime.strptime(str(new_task_params.expires_at), "%Y-%m-%d %H:%M:%S")
-        except ValueError:
-            return f"Wrong deadline!"
-        new_task = TaskModel(task_id=new_task_id, **vars(new_task_params))
+    def add_task(self, new_task_params: TaskDTO) -> TaskModel:
+        new_task = TaskModel(**vars(new_task_params))
         self.tasks.append(new_task)
+        return new_task
 
     def get_all_tasks(self) -> Iterator[TaskDTO]:
         for task in self.tasks:
-            task_info = TaskDTO(task.title, task.body, task.expires_at, task.status, task.created_at)
+            task_info = TaskDTO(task.task_id, task.title, task.body, task.expires_at, task.status, task.created_at)
             yield task_info
 
     def get_active_tasks(self) -> Iterator[TaskDTO]:
         for task in self.tasks:
             if not task.status:
-                task_info = TaskDTO(task.title, task.body, task.expires_at, task.status, task.created_at)
+                task_info = TaskDTO(task.task_id, task.title, task.body, task.expires_at, task.status, task.created_at)
                 yield task_info
+
+    def get_dto(self):
+        return UserDTO(self.uid,
+                       self.login,
+                       self.password_hash,
+                       self.created_at)
 
     def get_tasks_count(self) -> int:
         return len(self.tasks)
@@ -119,7 +125,7 @@ class UserModel:
         except IndexError:
             return None
         else:
-            return TaskDTO(task.title, task.body, task.expires_at, task.status, task.created_at)
+            return TaskDTO(task.task_id, task.title, task.body, task.expires_at, task.status, task.created_at)
 
     def delete_task(self, task_number: int) -> Optional[TaskDTO]:
         try:
@@ -127,7 +133,7 @@ class UserModel:
         except IndexError:
             return None
         else:
-            return TaskDTO(task.title, task.body, task.expires_at, task.status, task.created_at)
+            return TaskDTO(task.task_id, task.title, task.body, task.expires_at, task.status, task.created_at)
 
     def toggle_task(self, task_number: int) -> Optional[TaskDTO]:
         try:
@@ -136,7 +142,7 @@ class UserModel:
         except IndexError:
             return None
         else:
-            return TaskDTO(task.title, task.body, task.expires_at, task.status, task.created_at)
+            return TaskDTO(task.task_id, task.title, task.body, task.expires_at, task.status, task.created_at)
 
     def edit_task_title(self, task_number: int, new_title: str) -> Optional[str]:
         return self.tasks[task_number].change_title(new_title)
@@ -144,7 +150,7 @@ class UserModel:
     def edit_task_body(self, task_number: int, new_body: str) -> Optional[str]:
         return self.tasks[task_number].change_body(new_body)
 
-    def edit_task_deadline(self, task_number: int, new_deadline: str) -> Optional[str]:
+    def edit_task_deadline(self, task_number: int, new_deadline: datetime) -> Optional[str]:
         return self.tasks[task_number].change_deadline(new_deadline)
 
 
@@ -155,11 +161,7 @@ class SystemModel:
 
 
     def add_user(self, new_user: UserDTO) -> Optional[UserModel]:
-        for user in self.users:
-            if user.login == new_user.login:
-                return None
-        uid = len(self.users) + 1
-        new_user = UserModel(uid, **vars(new_user))
+        new_user = UserModel(**vars(new_user))
         self.users.append(new_user)
 
         return new_user

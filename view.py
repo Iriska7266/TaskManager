@@ -1,4 +1,7 @@
-from typing import List
+import datetime
+import os
+
+from typing import List, Optional
 
 from dto import TaskDTO
 
@@ -67,19 +70,30 @@ class UserView(BaseView):
         print("=" * 60)
 
     @staticmethod
-    def get_task_specs() -> TaskDTO:
+    def get_deadline() -> datetime:
+        deadline = input("Enter deadline (YYYY-mm-dd HH:MM:SS): ")
+        try:
+            deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d %H:%M:%S")
+        except ValueError:
+            raise ValueError("Wrong deadline!")
+        else:
+            return deadline
+
+    @staticmethod
+    def get_task_specs() -> Optional[TaskDTO]:
         task_data = {
+            "task_id": None,
             "title": input("Enter task title: "),
             "body": input("Enter task content: "),
-            "expires_at": input("Enter deadline (YYYY-mm-dd HH:MM:SS): ")
+            "expires_at": UserView.get_deadline()
         }
         return TaskDTO(**task_data)
 
     @staticmethod
-    def draw_tasks(tasks_info: List[TaskDTO]) -> None:
+    def draw_tasks(tasks_info: List[TaskDTO], error_message: str="Empty tasks list!") -> None:
         l = len(tasks_info)
         if not l:
-            UserView.show_message("Empty tasks list!")
+            UserView.show_message(error_message)
             return
 
         print("=" * 20)
@@ -99,7 +113,8 @@ class UserView(BaseView):
 class SystemView(BaseView):
     @staticmethod
     def greet() -> None:
-        print("Welcome to TaskManager program!")
+        os.system("cls")
+        print("Welcome to Task Manager program!")
 
     @staticmethod
     def draw_menu() -> None:

@@ -1,8 +1,4 @@
-from controller import *
-
-
-def test():
-    pass
+from controller import SystemController
 
 
 if __name__ == '__main__':

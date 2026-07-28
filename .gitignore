@@ -1,4 +1,5 @@
 /.env
-/private/
 /.idea/
+/private/
 /__pycache__/
+/SQL/
