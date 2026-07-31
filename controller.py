@@ -1,6 +1,15 @@
+import time
+
 from view import *
 from domain_models import *
-from database.repository import *
+
+try:
+    from database.repository import *
+except ConnectionError as e:
+    print(str(e))
+    print(f"Program will be closed in {EXIT_LAG} seconds.")
+    time.sleep(EXIT_LAG)
+    exit()
 
 
 class TaskController:
