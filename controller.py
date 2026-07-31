@@ -6,8 +6,7 @@ from domain_models import *
 try:
     from database.repository import *
 except ConnectionError as e:
-    print(str(e))
-    print(f"Program will be closed in {EXIT_LAG} seconds.")
+    SystemView.show_message(str(e) + f"\nProgram will be closed in {EXIT_LAG} seconds.")
     time.sleep(EXIT_LAG)
     exit()
 
